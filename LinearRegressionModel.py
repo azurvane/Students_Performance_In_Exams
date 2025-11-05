@@ -1,6 +1,5 @@
 import numpy as np
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 class LinearRegression:
     """
@@ -92,7 +91,7 @@ class LinearRegression:
         prediction = np.dot(X, self.weights) + self.bias
         return prediction
 
-    def train(self, X, y, iterations, learning_rate):
+    def train(self, X, y, iterations = 10000, learning_rate = 0.1):
         """
         train the model and updates the weights and bias
 
@@ -134,84 +133,4 @@ class LinearRegression:
             pbar.set_postfix({"MSE": f"{MSE:.4f}", "w_norm": f"{np.linalg.norm(self.weights):.2f}"})
 
         return loss_history
-
-
-""" ===========================================================================
-                    testing if the model is created or not
-    =========================================================================== """
-
-print("Example 1: Model with random initialization")
-model1 = LinearRegression(n_features=3, random_state=42)
-print(model1)
-print(f"Weights: {model1.weights}")
-print(f"Bias: {model1.bias}")
-
-# Make a prediction
-X = np.array([[1.0, 2.0, 3.0], [2.0, 3.0, 4.0]])
-prediction = model1.predict(X)
-print(f"Prediction for X={X}: {prediction}\n")
-
-print("Example 2: Model with custom weights and bias")
-custom_weights = np.array([0.5, 1.0, 1.5])
-model2 = LinearRegression(n_features=3, weights=custom_weights, bias=2.0)
-print(model2)
-prediction = model2.predict(X)
-print(f"Prediction for X={X}: {prediction}\n")
-
-print("Example 3: Update weights")
-new_weights = np.array([2.0, 3.0, 4.0])
-model1.set_weights(new_weights, bias=5.0)
-print("After updating weights:")
-print(model1)
-weights, bias = model1.get_weights()
-print(f"Retrieved weights: {weights}, bias: {bias}")
-
-
-
-""" ===========================================================================
-                            testing the train function
-    =========================================================================== """
-def function(X):
-    m, n = X.shape
-    y = []
-    np.random.seed(42)
-    w = np.random.random(n)
-    b = np.random.random()
-
-    for i in range(m):
-        y.append(np.sum(X[i] * w) + b)
-
-    y = np.array(y)
-
-    return y, w, b
-
-
-np.random.seed(42)
-X = np.random.random((40,6))
-y, w, b = function(X)
-
-
-model = LinearRegression(X.shape[1])
-losses = model.train(X, y, iterations=20000, learning_rate=0.01)
-plt.plot(losses)  
-
-
-weights, bias = model.get_weights()
-
-print("--- Model Parameter Comparison ---")
-print("==================================")
-
-# 1. True Parameters (The Target)
-print("TRUE PARAMETERS (W, b):")
-print(f"  True Weights (W): \n{w}") 
-print(f"  True Bias (b): {b:.4f}") 
-
-print("----------------------------------")
-
-# 2. Learned Parameters (The Result)
-print("LEARNED PARAMETERS (weights, bias):")
-print(f"  Learned Weights (w): \n{weights}")
-print(f"  Learned Bias (bias): {bias:.4f}")
-
-print("==================================")
 
